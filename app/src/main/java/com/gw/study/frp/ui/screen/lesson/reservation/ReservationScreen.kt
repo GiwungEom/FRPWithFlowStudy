@@ -24,23 +24,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gw.study.frp.ui.screen.UiState
+import com.gw.study.frp.ui.screen.toValue
 
 
 @Composable
-fun AirplaneReservationScreen(
+fun ReservationScreen(
     modifier: Modifier = Modifier,
-    viewModel: AirplaneReservationViewModel = viewModel()
+    viewModel: ReservationViewModel = viewModel()
 ) {
 
-    val reservationState: ReservationState by viewModel.reservationState.collectAsState()
+    val depDate by viewModel.depDateState.collectAsState(initial = UiState.Loading)
+    val retDate by viewModel.retDateState.collectAsState(initial = UiState.Loading)
+
+    val dateValidation by viewModel.dateValidation.collectAsState()
+
     val onChangeDate = { type: ReservationType, date: ReservationDate ->
-        viewModel.sendEventAction(
-            UserAction.ChangeReservation(type, date)
-        )
-    }
-    val onButtonClick = {
-        viewModel.sendEventAction(
-            UserAction.PressOkButton
+        viewModel.sendEvent(
+            UserEvent.ChangeReservation(type, date)
         )
     }
 
@@ -53,7 +54,7 @@ fun AirplaneReservationScreen(
         CalenderSelector(
             title = "Departure",
             type = ReservationType.Departure,
-            date = reservationState.depReservationDate,
+            date = depDate,
             yearRange = viewModel.yearRange,
             monthRange = viewModel.monthRange,
             dayRange = viewModel.dayRange,
@@ -64,7 +65,7 @@ fun AirplaneReservationScreen(
         CalenderSelector(
             title = "Return",
             type = ReservationType.Return,
-            date = reservationState.retReservationDate,
+            date = retDate,
             yearRange = viewModel.yearRange,
             monthRange = viewModel.monthRange,
             dayRange = viewModel.dayRange,
@@ -74,8 +75,8 @@ fun AirplaneReservationScreen(
         Spacer(modifier = Modifier.height(15.dp))
 
         Button(
-            onClick = onButtonClick,
-            enabled = reservationState.validation,
+            onClick = {},
+            enabled = dateValidation,
             modifier = Modifier.wrapContentSize()
         ) {
             Text(text = "Ok", style = MaterialTheme.typography.headlineMedium)
@@ -87,7 +88,7 @@ fun AirplaneReservationScreen(
 fun CalenderSelector(
     title: String,
     type: ReservationType,
-    date: ReservationDate,
+    date: UiState<ReservationDate>,
     yearRange: IntRange,
     monthRange: IntRange,
     dayRange: IntRange,
@@ -98,31 +99,38 @@ fun CalenderSelector(
     Row(modifier = modifier.fillMaxWidth()) {
         Text(text = title)
 
-        ReserveDropDownView(yearRange) {
-            onChangeDate(type, date.copy(year = it))
-        }
-        ReserveDropDownView(monthRange) {
-            onChangeDate(type, date.copy(month = it))
-        }
-        ReserveDropDownView(dayRange) {
-            onChangeDate(type, date.copy(day = it))
+        when (date) {
+            is UiState.State -> {
+                ReserveDropDownView(date.toValue().year, yearRange) {
+                    onChangeDate(type, date.toValue().copy(year = it))
+                }
+                ReserveDropDownView(date.toValue().month, monthRange) {
+                    onChangeDate(type, date.toValue().copy(month = it))
+                }
+                ReserveDropDownView(date.toValue().day, dayRange) {
+                    onChangeDate(type, date.toValue().copy(day = it))
+                }
+            }
+            is UiState.Loading -> {
+                Text(text = "State is Loading..")
+            }
         }
     }
 }
 
 @Composable
 fun ReserveDropDownView(
+    dateText: String,
     rangeDate: IntRange,
     onDateSelected: (String) -> Unit
 ) {
     var expandState by remember { mutableStateOf(false) }
-    var dateState by remember { mutableStateOf(rangeDate.first.toString()) }
 
     Column {
         Button(
             onClick = { expandState = true }
         ) {
-            Text(text = dateState)
+            Text(text = dateText)
         }
 
         DropdownMenu(
@@ -133,7 +141,6 @@ fun ReserveDropDownView(
                 DropdownMenuItem(
                     text = { Text(text = date.toString()) },
                     onClick = {
-                        dateState = date.toString()
                         onDateSelected(date.toString())
                         expandState = false
                     }
@@ -146,5 +153,5 @@ fun ReserveDropDownView(
 @Preview(showSystemUi = true)
 @Composable
 fun AirplaneReservationScreenPreview() {
-    AirplaneReservationScreen()
+    ReservationScreen()
 }
