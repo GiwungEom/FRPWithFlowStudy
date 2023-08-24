@@ -8,6 +8,10 @@ object Lessons {
         Lesson(
             title = "FRP Basic",
             route = Routes.Lesson1
+        ),
+        Lesson(
+            title = "Clear Field",
+            route = Routes.Lesson2
         )
     )
 }
