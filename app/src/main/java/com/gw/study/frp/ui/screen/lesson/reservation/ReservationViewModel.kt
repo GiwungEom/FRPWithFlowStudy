@@ -1,7 +1,10 @@
 package com.gw.study.frp.ui.screen.lesson.reservation
 
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.gw.study.frp.ui.screen.ActionEvent
 import com.gw.study.frp.ui.screen.FrpViewModel
 import com.gw.study.frp.ui.screen.UiState
@@ -9,7 +12,6 @@ import com.gw.study.frp.ui.screen.toValue
 import com.gw.study.frp.ui.screen.updateState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.util.Calendar
@@ -21,7 +23,17 @@ sealed class UserEvent: ActionEvent {
     ) : UserEvent()
 }
 
-class ReservationViewModel : FrpViewModel() {
+class ReservationViewModel(
+    rules: Rule // 유효성 검증 규칙
+) : FrpViewModel() {
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                ReservationViewModel(rules = ruleForNormal + ruleForChina)
+            }
+        }
+    }
 
     val monthRange = (1..12)
     val yearRange = (2023..2025)
@@ -61,9 +73,10 @@ class ReservationViewModel : FrpViewModel() {
     }
 
     // 두 날짜 상태 중 하나의 상태 변경 시 유효성 체크 진행
-    private val _dateValidation = _depDateState.combine(_retDateState) { depDate, retDate ->
-        depDate.toValue() <= retDate.toValue()
-    }
+    private val _dateValidation = rules.reify(
+        _depDateState.map { it.toValue() },
+        _retDateState.map { it.toValue() }
+    )
 
     // 유효성 상태
     val dateValidation = _dateValidation.stateIn(

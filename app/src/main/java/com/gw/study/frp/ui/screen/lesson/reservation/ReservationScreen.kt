@@ -31,9 +31,11 @@ import com.gw.study.frp.ui.screen.toValue
 @Composable
 fun ReservationScreen(
     modifier: Modifier = Modifier,
-    viewModel: ReservationViewModel = viewModel()
+    viewModel: ReservationViewModel = viewModel(
+        modelClass = ReservationViewModel::class.java,
+        factory = ReservationViewModel.Factory
+    )
 ) {
-
     val depDate by viewModel.depDateState.collectAsState(initial = UiState.Loading)
     val retDate by viewModel.retDateState.collectAsState(initial = UiState.Loading)
 
