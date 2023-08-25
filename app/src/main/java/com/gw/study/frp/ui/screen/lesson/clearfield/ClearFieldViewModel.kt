@@ -15,14 +15,15 @@ sealed class UserEvent: ActionEvent {
 class ClearFieldViewModel : FrpViewModel() {
 
     private val _textState = MutableStateFlow("")
-    private val _clearButtonFlow: MutableSharedFlow<Unit> = MutableSharedFlow()
+    private val buttonClickFlow: MutableSharedFlow<Unit> = MutableSharedFlow()
 
-    val textState = merge(_textState, _clearButtonFlow.map { "" })
+    private val clearTextFlow = buttonClickFlow.map { "" }
+    val textState = merge(_textState, clearTextFlow)
 
     override suspend fun actionHandle(actionEvent: ActionEvent) {
         when (actionEvent) {
             is UserEvent.ClearText -> {
-                _clearButtonFlow.emit(Unit)
+                buttonClickFlow.emit(Unit)
             }
             is UserEvent.TextChanged -> {
                 _textState.value = actionEvent.text
