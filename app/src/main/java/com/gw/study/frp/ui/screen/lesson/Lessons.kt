@@ -12,6 +12,10 @@ object Lessons {
         Lesson(
             title = "Clear Field",
             route = Routes.Lesson2
+        ),
+        Lesson(
+            title = "Translate",
+            route = Routes.Lesson3
         )
     )
 }
