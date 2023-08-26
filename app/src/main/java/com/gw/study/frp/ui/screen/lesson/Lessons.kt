@@ -16,6 +16,10 @@ object Lessons {
         Lesson(
             title = "Translate (Snapshot)",
             route = Routes.Lesson3
+        ),
+        Lesson(
+            title = "Calculate (Accumulator)",
+            route = Routes.Lesson4
         )
     )
 }
