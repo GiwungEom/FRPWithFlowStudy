@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.gw.study.frp.ui.screen.LessonsScreen
+import com.gw.study.frp.ui.screen.lesson.calculator.CalculatorScreen
 import com.gw.study.frp.ui.screen.lesson.clearfield.ClearFieldScreen
 import com.gw.study.frp.ui.screen.lesson.reservation.ReservationScreen
 import com.gw.study.frp.ui.screen.lesson.translate.TranslateScreen
@@ -96,6 +97,10 @@ private fun FRPWithFlowStudyApp() {
 
             composable(route = Routes.Lesson3.route) {
                 TranslateScreen()
+            }
+
+            composable(route = Routes.Lesson4.route) {
+                CalculatorScreen()
             }
         }
     }
