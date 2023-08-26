@@ -6,15 +6,15 @@ import com.gw.study.frp.ui.screen.route.Routes
 object Lessons {
     val lessons: List<Lesson> = listOf(
         Lesson(
-            title = "FRP Basic",
+            title = "FRP Basic (Validation)",
             route = Routes.Lesson1
         ),
         Lesson(
-            title = "Clear Field",
+            title = "Clear Field (Merge)",
             route = Routes.Lesson2
         ),
         Lesson(
-            title = "Translate",
+            title = "Translate (Snapshot)",
             route = Routes.Lesson3
         )
     )
