@@ -6,4 +6,6 @@ sealed class Routes(val route: String) {
     object Lesson2 : Routes(route = "Lesson2")
     object Lesson3 : Routes(route = "Lesson3")
     object Lesson4 : Routes(route = "Lesson4")
+
+    object Lesson5 : Routes(route = "Lesson5")
 }
