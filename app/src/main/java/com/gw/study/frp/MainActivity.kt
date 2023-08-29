@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.gw.study.frp.ui.screen.LessonsScreen
 import com.gw.study.frp.ui.screen.lesson.calculator.CalculatorScreen
 import com.gw.study.frp.ui.screen.lesson.clearfield.ClearFieldScreen
+import com.gw.study.frp.ui.screen.lesson.fromvalidation.FormValidationScreen
 import com.gw.study.frp.ui.screen.lesson.reservation.ReservationScreen
 import com.gw.study.frp.ui.screen.lesson.translate.TranslateScreen
 import com.gw.study.frp.ui.screen.route.Routes
@@ -102,6 +103,11 @@ private fun FRPWithFlowStudyApp() {
             composable(route = Routes.Lesson4.route) {
                 CalculatorScreen()
             }
+
+            composable(route = Routes.Lesson5.route) {
+                FormValidationScreen()
+            }
+
         }
     }
 }

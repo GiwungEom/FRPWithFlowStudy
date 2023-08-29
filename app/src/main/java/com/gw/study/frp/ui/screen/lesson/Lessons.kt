@@ -20,6 +20,10 @@ object Lessons {
         Lesson(
             title = "Calculate (Accumulator)",
             route = Routes.Lesson4
+        ),
+        Lesson(
+            title = "formValidation (Multiple Validation)",
+            route = Routes.Lesson5
         )
     )
 }
