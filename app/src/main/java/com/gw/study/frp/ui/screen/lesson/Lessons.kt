@@ -23,7 +23,7 @@ object Lessons {
         ),
         Lesson(
             title = "formValidation (Multiple Validation)",
-            route = Routes.Lesson4
+            route = Routes.Lesson5
         )
     )
 }
